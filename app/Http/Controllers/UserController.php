@@ -25,17 +25,17 @@ class UserController extends Controller
         return redirect('/');
     }
 
-
     public function register(Request $request) {
         $incomingFields = $request->validate([
             'name' => ['required', 'min:3', 'max:10', Rule::unique('users', 'name')],
             'email' => ['required', 'email', Rule::unique('users', 'email')],
-            'password' => ['required', 'min:8', 'max:15']
+            'password' => ['required', 'min:3', 'max:15']
         ]);
         
         $incomingFields['password'] = bcrypt($incomingFields['password']);
         
-        $user = User::created($incomingFields);
+        $user = User::create($incomingFields);
+
         auth()->login($user);
 
         return redirect('/');
